@@ -1,0 +1,241 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.75rem;
+
+  /* Warm parchment light theme */
+  --background: hsl(40 33% 98%);
+  --foreground: hsl(162 43% 11%);
+
+  --card: hsl(40 40% 99%);
+  --card-foreground: hsl(162 43% 11%);
+
+  --popover: hsl(40 40% 99%);
+  --popover-foreground: hsl(162 43% 11%);
+
+  /* Deep emerald primary */
+  --primary: hsl(158 65% 21%);
+  --primary-foreground: hsl(40 40% 98%);
+
+  /* Soft sage secondary */
+  --secondary: hsl(158 24% 92%);
+  --secondary-foreground: hsl(162 45% 14%);
+
+  --muted: hsl(40 20% 94%);
+  --muted-foreground: hsl(162 12% 40%);
+
+  /* Gold accent */
+  --accent: hsl(43 74% 90%);
+  --accent-foreground: hsl(38 70% 26%);
+
+  --destructive: hsl(0 72% 45%);
+  --destructive-foreground: hsl(0 0% 98%);
+
+  --border: hsl(158 20% 88%);
+  --input: hsl(158 20% 86%);
+  --ring: hsl(158 65% 30%);
+
+  /* Brand tokens */
+  --gold: hsl(43 74% 49%);
+  --gold-foreground: hsl(38 70% 18%);
+  --emerald: hsl(158 65% 21%);
+  --emerald-light: hsl(158 45% 34%);
+
+  --chart-1: hsl(158 65% 30%);
+  --chart-2: hsl(43 74% 49%);
+  --chart-3: hsl(173 58% 39%);
+  --chart-4: hsl(35 80% 55%);
+  --chart-5: hsl(190 60% 40%);
+
+  --sidebar: hsl(158 30% 96%);
+  --sidebar-foreground: hsl(162 43% 11%);
+  --sidebar-primary: hsl(158 65% 21%);
+  --sidebar-primary-foreground: hsl(40 40% 98%);
+  --sidebar-accent: hsl(158 24% 90%);
+  --sidebar-accent-foreground: hsl(162 45% 14%);
+  --sidebar-border: hsl(158 20% 88%);
+  --sidebar-ring: hsl(158 65% 30%);
+}
+
+.dark {
+  /* Deep night-emerald theme */
+  --background: hsl(165 38% 6%);
+  --foreground: hsl(40 30% 94%);
+
+  --card: hsl(165 32% 9%);
+  --card-foreground: hsl(40 30% 94%);
+
+  --popover: hsl(165 32% 9%);
+  --popover-foreground: hsl(40 30% 94%);
+
+  --primary: hsl(158 58% 42%);
+  --primary-foreground: hsl(165 45% 7%);
+
+  --secondary: hsl(165 24% 15%);
+  --secondary-foreground: hsl(40 30% 94%);
+
+  --muted: hsl(165 22% 14%);
+  --muted-foreground: hsl(155 12% 66%);
+
+  --accent: hsl(43 45% 18%);
+  --accent-foreground: hsl(43 80% 72%);
+
+  --destructive: hsl(0 62% 50%);
+  --destructive-foreground: hsl(0 0% 98%);
+
+  --border: hsl(165 20% 18%);
+  --input: hsl(165 20% 20%);
+  --ring: hsl(158 55% 45%);
+
+  --gold: hsl(43 80% 60%);
+  --gold-foreground: hsl(38 70% 12%);
+  --emerald: hsl(158 58% 42%);
+  --emerald-light: hsl(158 50% 55%);
+
+  --chart-1: hsl(158 58% 45%);
+  --chart-2: hsl(43 80% 60%);
+  --chart-3: hsl(173 58% 45%);
+  --chart-4: hsl(35 80% 60%);
+  --chart-5: hsl(190 60% 50%);
+
+  --sidebar: hsl(165 34% 8%);
+  --sidebar-foreground: hsl(40 30% 94%);
+  --sidebar-primary: hsl(158 58% 42%);
+  --sidebar-primary-foreground: hsl(165 45% 7%);
+  --sidebar-accent: hsl(165 24% 15%);
+  --sidebar-accent-foreground: hsl(40 30% 94%);
+  --sidebar-border: hsl(165 20% 18%);
+  --sidebar-ring: hsl(158 55% 45%);
+}
+
+@theme inline {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: 'Amiri Quran', 'Scheherazade New', serif;
+  --font-bangla: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-emerald: var(--emerald);
+  --color-emerald-light: var(--emerald-light);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .font-arabic {
+    font-family: var(--font-arabic);
+  }
+
+  .font-bangla {
+    font-family: var(--font-bangla);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    z-index: 100;
+    border-radius: var(--radius);
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: top 0.2s ease;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@utility glass {
+  background-color: color-mix(in oklab, var(--card) 70%, transparent);
+  backdrop-filter: blur(16px) saturate(1.4);
+}
+
+/* Islamic geometric-ish subtle pattern background */
+@utility pattern-islamic {
+  background-image: radial-gradient(
+      circle at 1px 1px,
+      color-mix(in oklab, var(--gold) 22%, transparent) 1px,
+      transparent 0
+    );
+  background-size: 22px 22px;
+}

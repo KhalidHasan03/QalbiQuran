@@ -1,0 +1,26 @@
+{
+  "name": "QalbiQuran",
+  "short_name": "QalbiQuran",
+  "description": "Read, listen and reflect on the Holy Qur'an in Arabic, English and Bangla with streaks, goals and progress.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#06120e",
+  "theme_color": "#0b3d2e",
+  "categories": ["books", "education", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
