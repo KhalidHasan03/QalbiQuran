@@ -50,6 +50,20 @@ php artisan serve            # http://localhost:8000
 [Admin panel](#admin-panel)); `quran:import` loads the Qur'an data from the
 Al Qur'an Cloud API.
 
+### Email verification
+
+Registration sends a signed verification link that is valid for 60 minutes.
+Clicking it marks the account verified and redirects to
+`FRONTEND_URL/verify-email?verified=1` (or `?verified=0` when the link is
+invalid/expired). The endpoint is signed and public on purpose — it must be
+openable straight from an inbox without an active session.
+
+Locally the default `MAIL_MAILER=log` driver does not deliver mail; the
+verification link is written to `backend/storage/logs/laravel.log`. Set a real
+mailer (SMTP, Mailgun, …) in `.env` to send it for real. Unverified users can
+still use the portal but see a reminder banner; use the "Resend verification
+email" action on `/verify-email` to issue a fresh link.
+
 ### Useful backend commands
 
 ```bash

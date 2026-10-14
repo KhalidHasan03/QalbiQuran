@@ -13,3 +13,11 @@ Thumbs.db
 
 # Local environment
 *.local
+
+# Secrets — never commit real credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+auth.json

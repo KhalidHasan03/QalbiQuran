@@ -19,6 +19,7 @@ export function VerifyEmailPage() {
   const setUser = useAuth((s) => s.setUser)
   const [params] = useSearchParams()
   const verified = params.get('verified') === '1'
+  const invalid = params.get('verified') === '0'
 
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [message, setMessage] = useState<string | null>(null)
@@ -68,9 +69,11 @@ export function VerifyEmailPage() {
         ) : (
           <>
             <p className="text-sm text-muted-foreground">
-              {user
-                ? 'We sent a verification link to your email address. Open it to confirm your account.'
-                : 'Open the verification link we emailed you to confirm your account.'}
+              {invalid
+                ? 'This verification link is invalid or has expired. Request a new one below.'
+                : user
+                  ? 'We sent a verification link to your email address. Open it to confirm your account.'
+                  : 'Open the verification link we emailed you to confirm your account.'}
             </p>
 
             {user && (

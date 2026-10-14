@@ -20,6 +20,7 @@ vi.mock('@/lib/auth', async (importOriginal) => {
 import { useAuth } from '@/store/auth'
 import { LoginPage } from './login'
 import { RegisterPage } from './register'
+import { VerifyEmailPage } from './verify-email'
 
 const user: User = {
   id: 1,
@@ -38,6 +39,7 @@ function renderRoute(path: string) {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/portal" element={<div>Portal dashboard</div>} />
       </Routes>
     </MemoryRouter>,
@@ -88,5 +90,19 @@ describe('RegisterPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /create account/i }))
 
     await waitFor(() => expect(screen.getByText('Portal dashboard')).toBeInTheDocument())
+  })
+})
+
+describe('VerifyEmailPage', () => {
+  it('confirms the email when the link reports success', () => {
+    renderRoute('/verify-email?verified=1')
+
+    expect(screen.getByText(/your email is verified/i)).toBeInTheDocument()
+  })
+
+  it('explains when the verification link is invalid or expired', () => {
+    renderRoute('/verify-email?verified=0')
+
+    expect(screen.getByText(/invalid or has expired/i)).toBeInTheDocument()
   })
 })

@@ -11,7 +11,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -101,16 +101,35 @@ class AuthController extends Controller
         return response()->json(['message' => 'Verification link sent.']);
     }
 
-    public function verifyEmail(EmailVerificationRequest $request): JsonResponse|RedirectResponse
+    public function verifyEmail(Request $request, int $id, string $hash): JsonResponse|RedirectResponse
     {
-        $request->fulfill();
+        $user = User::find($id);
 
+        if (! $user || ! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+            return $this->verificationResponse($request, false);
+        }
+
+        if (! $user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+            event(new Verified($user));
+        }
+
+        return $this->verificationResponse($request, true);
+    }
+
+    private function verificationResponse(Request $request, bool $verified): JsonResponse|RedirectResponse
+    {
         if ($request->wantsJson()) {
+            if (! $verified) {
+                return response()->json(['message' => 'Invalid or expired verification link.'], 403);
+            }
+
             return response()->json(['message' => 'Email verified.']);
         }
 
-        return redirect()->away(
-            rtrim((string) config('app.frontend_url'), '/').'/verify-email?verified=1'
-        );
+        $target = rtrim((string) config('app.frontend_url'), '/')
+            .'/verify-email?verified='.($verified ? '1' : '0');
+
+        return redirect()->away($target);
     }
 }

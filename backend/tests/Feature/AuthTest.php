@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -200,7 +201,24 @@ class AuthTest extends TestCase
         $this->assertTrue(Hash::check('brand-new-456', $user->fresh()->password));
     }
 
-    public function test_email_verification_redirects_to_the_frontend(): void
+    public function test_registration_sends_a_verification_notification(): void
+    {
+        Notification::fake();
+
+        $this->postJson('/api/v1/auth/register', [
+            'name' => 'John Doe',
+            'username' => 'johndoe',
+            'email' => 'john@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ])->assertCreated();
+
+        $user = User::where('email', 'john@example.com')->firstOrFail();
+
+        Notification::assertSentTo($user, VerifyEmail::class);
+    }
+
+    public function test_a_user_can_verify_the_email_from_a_signed_link_without_being_logged_in(): void
     {
         $user = User::factory()->unverified()->create();
 
@@ -209,8 +227,72 @@ class AuthTest extends TestCase
             'hash' => sha1($user->email),
         ]);
 
-        $this->actingAs($user)->get($url)->assertRedirect();
+        $this->get($url)->assertRedirect(
+            rtrim(config('app.frontend_url'), '/').'/verify-email?verified=1'
+        );
 
         $this->assertNotNull($user->fresh()->email_verified_at);
+    }
+
+    public function test_email_verification_returns_json_for_api_clients(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $url = URL::temporarySignedRoute('verification.verify', now()->addMinutes(60), [
+            'id' => $user->id,
+            'hash' => sha1($user->email),
+        ]);
+
+        $this->getJson($url)
+            ->assertOk()
+            ->assertJsonPath('message', 'Email verified.');
+
+        $this->assertNotNull($user->fresh()->email_verified_at);
+    }
+
+    public function test_email_verification_is_rejected_for_a_bad_hash(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $url = URL::temporarySignedRoute('verification.verify', now()->addMinutes(60), [
+            'id' => $user->id,
+            'hash' => sha1('someone-else@example.com'),
+        ]);
+
+        $this->get($url)->assertRedirect(
+            rtrim(config('app.frontend_url'), '/').'/verify-email?verified=0'
+        );
+
+        $this->assertNull($user->fresh()->email_verified_at);
+    }
+
+    public function test_email_verification_requires_a_valid_signature(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $this->get('/api/v1/auth/verify-email/'.$user->id.'/'.sha1($user->email))
+            ->assertForbidden();
+
+        $this->assertNull($user->fresh()->email_verified_at);
+    }
+
+    public function test_an_unverified_user_can_resend_the_verification_email(): void
+    {
+        Notification::fake();
+
+        $user = User::factory()->unverified()->create();
+
+        $this->actingAs($user)
+            ->postJson('/api/v1/auth/email/verification-notification')
+            ->assertOk()
+            ->assertJsonPath('message', 'Verification link sent.');
+
+        Notification::assertSentTo($user, VerifyEmail::class);
+    }
+
+    public function test_unauthenticated_browser_requests_redirect_to_the_frontend_login(): void
+    {
+        $this->get('/api/v1/auth/user')
+            ->assertRedirect(rtrim(config('app.frontend_url'), '/').'/login');
     }
 }
